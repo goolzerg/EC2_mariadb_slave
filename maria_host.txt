@@ -41,10 +41,12 @@ tmpdir		= /tmp
 lc_messages_dir	= /usr/share/mysql
 lc_messages	= en_US
 skip-external-locking
+skip-networking=0
+skip-bind-address
 #
 # Instead of skip-networking the default is now to listen only on
 # localhost which is more compatible and is not less secure.
-bind-address		= 0.0.0.0
+# bind-address		= 127.0.0.1
 #
 # * Fine Tuning
 #
