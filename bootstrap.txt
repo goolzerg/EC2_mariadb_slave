@@ -1,0 +1,44 @@
+#!/bin/bash
+
+#ENV
+PASSWORD=555
+SLAVE_USER='rep_slave'
+
+#Installing mariadb
+sudo apt-get install software-properties-common
+sudo apt-key adv --fetch-keys 'https://mariadb.org/mariadb_release_signing_key.asc'
+sudo add-apt-repository 'deb [arch=amd64,arm64,ppc64el] http://mirrors.tuna.tsinghua.edu.cn/mariadb/repo/10.2/ubuntu bionic main'
+
+export DEBIAN_FRONTEND="noninteractive"
+sudo debconf-set-selections <<< "mariadb-server mysql-server/root_password password $PASSWORD"
+sudo debconf-set-selections <<< "mariadb-server mysql-server/root_password_again password $PASSWORD"
+sudo apt update
+sudo apt-get install -y mariadb-server
+
+#Cfg Installing (host)
+sudo rm /etc/mysql/my.cnf
+curl https://raw.githubusercontent.com/goolzerg/mariadb_ainstall/master/maria_host.txt -o /etc/mysql/my.cnf
+
+#Create user for slave
+mysql -u root --password=$PASSWORD -e "CREATE USER '$SLAVE_USER'@'%' IDENTIFIED BY '$SLAVE_USER'; GRANT REPLICATION SLAVE ON *.* to '$SLAVE_USER'@'%'"
+
+#Docker Installing
+sudo apt-get install \
+apt-transport-https \
+gnupg-agent
+
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+
+sudo add-apt-repository \
+"deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+$(lsb_release -cs) \
+stable"
+sudo apt-get update
+sudo apt-get install docker-ce docker-ce-cli containerd.io -y
+
+#MariaDB container installing
+sudo docker build https://raw.githubusercontent.com/goolzerg/mariadb_ainstall/master/Dockerfile -t mariadb
+sudo curl https://raw.githubusercontent.com/goolzerg/mariadb_ainstall/master/init.sh -o /home/init.sh
+sudo docker run --name masha -e MYSQL_ROOT_PASSWORD=$PASSWORD -d mariadb
+sudo systemctl restart mysqld
+sudo sh /home/init.sh
