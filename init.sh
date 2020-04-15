@@ -1,9 +1,7 @@
 #!/bin/bash
 PASSWORD=555
 HOST_IP=$(hostname -i)
-SLAVE_USER='rep_master'
-
-mysql -u root --password=$PASSWORD -e "CREATE USER '$SLAVE_USER'@'%' IDENTIFIED BY '$SLAVE_USER'; GRANT REPLICATION SLAVE ON *.* to '$SLAVE_USER'@'%'"
+SLAVE_USER='rep_slave'
 
 CONTAINER_IP=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' masha)
 POS=$(mysql -u root --password=$PASSWORD -e "SHOW MASTER STATUS\G" | grep Position | sed 's/[^0-9]*//g')
