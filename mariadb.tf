@@ -1,5 +1,6 @@
 provider "aws" {
-
+  access_key = "access_key"
+  secret_key = "secret_ke"
   region     = "us-east-1"
 }
 
@@ -47,8 +48,8 @@ resource "aws_security_group" "allow_ssh" {
 
 resource "aws_key_pair" "pixel_key" {
   key_name   = "pixel_key"
-  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCDgZEiO3Spc4GOMl+oRvVvo9y6j6Ne5v+TaUmANXtZ4VE/B4tTwksvZvQ0opEW6MgFHM4D2dbOgZ/NQ8f1ZaTqM6XfSnktlkSWPUudTidGVtj9dWQGLt59kIw5CCwqoZtJLToQ9B7MicD9kWHop8V7r4Guy2ezEeQRzblESDJMy7jKc4Dj3MlM+EEzfOcMfHeeMfPCNKpTqOK1Pagr9PU6UCOiJncRs7tRINFwIi7rkFl3Owxjxtc8domw0e3oBX4S6RiN4Nj+B6iQOq3gSscGtmuNgLiTsNHIftBj3nKRn+q/nL/qyKrWwmwIuroWZSzTRKHPkYKVmIZun33tw/cj imported-openssh-key"
-}
+  public_key = "PUBLIC_KEY"
+  }
 
 #Elastic IP address
 
