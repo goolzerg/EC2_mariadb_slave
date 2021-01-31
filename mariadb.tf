@@ -5,7 +5,6 @@ provider "aws" {
 }
 
 #EC2 Instance
-
 resource "aws_instance" "everypixel_test" {
   ami             = "ami-07ebfd5b3428b6f4d"
   instance_type   = "t2.micro"
@@ -16,7 +15,6 @@ resource "aws_instance" "everypixel_test" {
 
 
 #Security Group
-
 resource "aws_default_vpc" "default" {
   tags = {
     Name = "Default VPC"
@@ -26,7 +24,6 @@ resource "aws_default_vpc" "default" {
 resource "aws_security_group" "allow_ssh" {
   name   = "allow_ssh"
   vpc_id = aws_default_vpc.default.id
-
 
   ingress {
     description = "ssh"
@@ -45,14 +42,12 @@ resource "aws_security_group" "allow_ssh" {
 }
 
 #SSH key
-
 resource "aws_key_pair" "pixel_key" {
   key_name   = "pixel_key"
   public_key = "PUBLIC_KEY"
   }
 
 #Elastic IP address
-
 resource "aws_eip" "everypixel_test" {
   instance = aws_instance.everypixel_test.id
   vpc      = true
